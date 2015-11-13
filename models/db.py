@@ -57,8 +57,28 @@ auth = Auth(db)
 service = Service()
 plugins = PluginManager()
 
+auth.settings.extra_fields['auth_user']= [
+  Field('date_of_birth',type='date'),
+  Field('address'),
+  Field('city'),
+  Field('zip'),
+  Field('phone'),
+  Field('picture', 'upload'),]
+
+auth.settings.password_min_length = 6
+auth.settings.actions_disabled = ['retrieve_username']
+
+#To activate email based verification
+#auth.settings.registration_requires_verification = True
+
+#To allow user to automatically login after regirsteration
+#auth.settings.login_after_registration = True
+
+#Not to create user group for every user
+#auth.settings.create_user_groups = False
+
 ## create all tables needed by auth if not custom tables
-auth.define_tables(username=False, signature=False)
+auth.define_tables(username=True, signature=False)
 
 ## configure email
 mail = auth.settings.mailer
