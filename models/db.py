@@ -72,24 +72,28 @@ auth.settings.actions_disabled = ['retrieve_username']
 #auth.settings.registration_requires_verification = True
 
 #To allow user to automatically login after regirsteration
-#auth.settings.login_after_registration = True
+auth.settings.login_after_registration = True
 
 #Not to create user group for every user
-#auth.settings.create_user_groups = False
+auth.settings.create_user_groups = False
 
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=True, signature=False)
 
 ## configure email
 mail = auth.settings.mailer
-mail.settings.server = 'logging' if request.is_local else myconf.take('smtp.server')
-mail.settings.sender = myconf.take('smtp.sender')
-mail.settings.login = myconf.take('smtp.login')
+
+mail.settings.server =  'smtp.gmail.com:587'
+mail.settings.sender = 'singhal.abhi0009@gmail.com'
+mail.settings.login = 'singhal.abhi0009@gmail.com:ygfqmgwydvtbcpba'
+
 
 ## configure auth policy
-auth.settings.registration_requires_verification = False
+auth.settings.registration_requires_verification = True
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+auth.messages.verify_email = 'Click on the link http://' +     request.env.http_host +     URL(r=request,c='default',f='user',args=['verify_email']) +     '/%(key)s to verify your email'
+auth.messages.reset_password = 'Click on the link http://' +     request.env.http_host +     URL(r=request,c='default',f='user',args=['reset_password']) +     '/%(key)s to reset your password'
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
