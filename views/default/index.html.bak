@@ -8,14 +8,13 @@
           <div class="col-md-3" text-right>
           </div>
           <div class="col-md-8" text-center>
-              <a class="btn btn-primary" href="{{=URL('default','user/login')}}" role="button"> LogIn </a>
+              <a class="btn btn-primary" href="{{=URL('default','user/login')}}" role="button"> Log In </a>
               <a class="btn btn-primary" href="{{=URL('default','user/register')}}" role="button"> Sign Up </a>
-              <a class="btn btn-primary" href="#" role="button"> Browse </a>
+              <a class="btn btn-primary" href="{{=URL('default','user/register')}}" role="button"> Browse </a>
           </div>
           <div class="col-md-1" text-left>
           </div>
   </div>
   <div class="col-md-1"></div>
 </div>
-
 {{end}}

@@ -16,9 +16,12 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
 
+def try1():
+    dict1={}
+    dict1['name']="fefer"
+    return dict()
 
 def user():
     """
@@ -56,3 +59,13 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+
+def browseandshop():
+    category_list=db(db.category_type.id>0).select().as_list()
+    style_list=db(db.style_type.id>0).select().as_list()
+    shape_list=db(db.shape_type.id>0).select().as_list()
+    size_list=db(db.size_type.id>0).select().as_list()
+    price_group_list=db(db.price_group_type.id>0).select().as_list()
+    product_list=db(db.product.id>0).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price).as_list()
+    return locals()

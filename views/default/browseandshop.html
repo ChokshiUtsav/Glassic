@@ -1,0 +1,97 @@
+{{extend 'layout.html'}}
+{{block header}}
+<div class="row" style="margin-left:20px;margin-top:20px">
+<div class="row">
+        <ul class="nav nav-pills">
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Glass Type
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {{for i in category_list:}}
+                <li><a href="#">{{=i['name']}}</a></li>
+                <!--<li style="margin-left:20px"></li>-->
+                {{pass}}
+            </ul>
+          </li>
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Glass Style
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {{for i in style_list:}}
+                <li><a href="#">{{=i['name']}}</a></li>
+                <!--<li style="margin-left:20px"></li>-->
+                {{pass}}
+            </ul>
+          </li>
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Glass Shape
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {{for i in shape_list:}}
+                <li><a href="#">{{=i['name']}}</a></li>
+                <!--<li style="margin-left:20px"></li>-->
+                {{pass}}
+            </ul>
+          </li>
+            <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Glass Size
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {{for i in size_list:}}
+                <li><a href="#">{{=i['name']}}</a></li>
+                <!--<li style="margin-left:20px"></li>-->
+                {{pass}}
+            </ul>
+          </li>
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Price Group
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {{for i in price_group_list:}}
+                <li><a href="#">{{=i['name']}}</a></li>
+                <!--<li style="margin-left:20px"></li>-->
+                {{pass}}
+            </ul>
+          </li>
+         <button type="button" class="btn btn-primary" aria-label="Left Align" style="margin-left:20px">
+             <span class="glyphicon glyphicon glyphicon-filter" aria-hidden="true"></span>
+             Filter
+        </button>
+  </div>
+  <hr/>
+  <div class="row">
+   {{for i in product_list:}}
+   <div class="col-md-4">
+     <div class="thumbnail">
+       <img width="175px" src="{{=URL('download', args=i['p_image'])}}" />
+       <div class="caption">
+        <h3>{{=i['p_name']}}</h3>
+        <h4>Price : {{=i['p_price']}} </h4>
+        <div class="row">
+          <div class="col-md-6">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"> Add to Cart
+                </label>
+              </div>
+         </div>
+         <div class="col-md-6">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"> Add to WishList
+                </label>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{pass}}
+</div>
+</div>
+{{end}}
