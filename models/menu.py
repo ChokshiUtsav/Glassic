@@ -31,19 +31,19 @@ response.menu = [
 
 if auth.has_membership(role='admin'):
     response.menu = [
-    (T('Manage Products'), False, URL('default', 'index'), []),
+    (T('Manage Products'), False, URL('admin', 'manage_products'), []),
     (T('Manage Users'), False, URL('admin', 'manage_users'), []),
     ]
 else:
-    if auth.user:
+    #if auth.user:
         response.menu = [
         (T('Browse | Shop'), False, URL('default', 'browseandshop'), []),
-        (T('Your Cart'), False, URL('default', 'index'), []),
+        (T('Your Cart'), False, URL('default', 'yourcart'), []),
         (T('Your Orders'), False, URL('default', 'index'), []),
         (T('Try'), False, URL('default', 'index'), []),
         (T('WishList'), False, URL('default', 'index'), []),
         ]
-    else:
+    #else:
         (T('Home'), False, URL('default', 'index'), [])
 
 

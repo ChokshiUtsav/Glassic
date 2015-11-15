@@ -33,3 +33,6 @@ db.define_table('product',
    Field('p_sortable','integer'),
    auth.signature,
    format='%(p_name)s')
+
+#Maintaing a cart to save selected items across pages
+session.cart = session.cart or {}

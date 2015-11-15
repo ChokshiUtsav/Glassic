@@ -57,6 +57,10 @@ def call():
 
 
 def browseandshop():
+    session.cart=[]
+    if request.vars:
+        session.cart.append(request.vars)
+        response.flash(request.vars);
     category_list=db(db.category_type.id>0).select().as_list()
     style_list=db(db.style_type.id>0).select().as_list()
     shape_list=db(db.shape_type.id>0).select().as_list()
@@ -64,3 +68,28 @@ def browseandshop():
     price_group_list=db(db.price_group_type.id>0).select().as_list()
     product_list=db(db.product.id>0).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price).as_list()
     return locals()
+
+@auth.requires_login()
+#To maintain cart across session
+def maintain_cart():
+    key=str(request.args(0))
+    if not session.cart:
+        session.cart={}
+        #response.flash="Found Empty Cart"
+    if key in session.cart:
+        del session.cart[key]
+    else:
+        session.cart[key]=1
+
+@auth.requires_login()
+#To see and process the cart
+def yourcart():
+    if not session.cart:
+        session.flash = 'Add something to cart'
+        redirect(URL('default', 'browseandshop'))
+    else:
+        product_list=[]
+        for i in session.cart:
+            for row in db(db.product.id==int(i)).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price):
+                product_list.append(row)
+        return locals()

@@ -1,6 +1,6 @@
 {{extend 'layout.html'}}
 {{block header}}
-<div class="row" style="margin-left:20px;margin-top:20px">
+<div class="row" style="margin-left:20px;margin-top:20px" id="div123">
 <div class="row">
         <ul class="nav nav-pills">
           <li role="presentation" class="dropdown">
@@ -76,14 +76,17 @@
           <div class="col-md-6">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox"> Add to Cart
+                  {{cartItemIDStr="cartItem_"+str(i['id'])}}
+                  {{str1="maintain_cart/"+str(i['id'])}}
+                  <input type="checkbox" id="{{=cartItemIDStr}}" onclick="ajax('{{=URL('default',str1)}}', [], '');"/> Add to Cart
                 </label>
               </div>
          </div>
          <div class="col-md-6">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox"> Add to WishList
+                  {{wlItemIDStr="cartItem_"+str(i['id'])}}
+                  <input type="checkbox" id="{{=wlItemIDStr}}"> Add to WishList
                 </label>
               </div>
           </div>
@@ -94,4 +97,10 @@
   {{pass}}
 </div>
 </div>
+<script>
+//function handleCartCheck(cart1) {
+//   var value = cart1.id;
+//     alert(msg)
+//}
+</script>
 {{end}}
