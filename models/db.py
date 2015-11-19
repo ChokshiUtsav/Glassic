@@ -58,12 +58,13 @@ service = Service()
 plugins = PluginManager()
 
 auth.settings.extra_fields['auth_user']= [
-  Field('date_of_birth',type='date'),
+  Field('date_of_birth',type='date',required=True),
   Field('address'),
-  Field('city'),
-  Field('zip'),
-  Field('phone'),
-  Field('picture', 'upload'),]
+  Field('city','string'),
+  Field('zip','integer',length=6),
+  Field('phone','integer',length=10),
+  Field('picture', 'upload'),
+  Field('wallet','integer')]
 
 auth.settings.password_min_length = 6
 auth.settings.actions_disabled = ['retrieve_username']

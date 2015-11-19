@@ -8,6 +8,9 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
+import datetime
+balance=0
+
 def index():
     """
     example action using the internationalization operator T and flash
@@ -57,10 +60,6 @@ def call():
 
 
 def browseandshop():
-    session.cart=[]
-    if request.vars:
-        session.cart.append(request.vars)
-        response.flash(request.vars);
     category_list=db(db.category_type.id>0).select().as_list()
     style_list=db(db.style_type.id>0).select().as_list()
     shape_list=db(db.shape_type.id>0).select().as_list()
@@ -69,6 +68,7 @@ def browseandshop():
     product_list=db(db.product.id>0).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price).as_list()
     return locals()
 
+@auth.requires_login()
 #To maintain cart across session
 def maintain_cart():
     key=str(request.args(0))
@@ -91,4 +91,112 @@ def yourcart():
         for i in session.cart:
             for row in db(db.product.id==int(i)).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price):
                 product_list.append(row)
-        return locals()
+    return locals()
+
+def placeOrderValidation(form):
+
+    pmode = str(form.vars.payment_mode)
+    totalPrice=int(session.totalPrice)
+    dmode = str(form.vars.delivery_mode)
+
+    if dmode=='Speed Transit':
+        totalPrice = totalPrice + 100
+
+    if pmode=='Pay Using Wallet':
+        if  totalPrice > balance:
+            form.errors.payment_mode = 'Insufficient balance!! Please use COD or fill wallet!'
+        else:
+            session.totalPrice = totalPrice
+
+    if pmode=='Cash On Delivery':
+        if totalPrice < 1200 :
+            form.errors.payment_mode = 'Can not place an order of less than 1200 on COD.'
+        else:
+            session.totalPrice = totalPrice
+
+@auth.requires_login()
+def placeorder():
+    global balance
+    form = SQLFORM.factory(
+        Field('first_name','string' ,requires=IS_NOT_EMPTY()),
+        Field('last_name','string',requires=IS_NOT_EMPTY()),
+        Field('email_address', requires=IS_EMAIL()),
+        Field('shipping_address', requires=IS_NOT_EMPTY()),
+        Field('shipping_city', requires=IS_NOT_EMPTY()),
+        Field('zip_code', requires=IS_NOT_EMPTY()),
+        Field('contact', 'string',length=10,requires=IS_NOT_EMPTY()),
+        Field('payment_mode',requires=IS_IN_SET(['Cash On Delivery','Pay Using Wallet'])),
+        Field('delivery_mode',requires=IS_IN_SET(['Speed Transit','Normal Transit'])),
+    )
+    form.vars.first_name=auth.user.first_name
+    form.vars.last_name=auth.user.last_name
+    form.vars.email_address=auth.user.email
+    form.vars.shipping_address=auth.user.address
+    form.vars.shipping_city=auth.user.city
+    form.vars.zip_code=auth.user.zip
+    form.vars.contact=auth.user.phone
+
+    row=db(db.auth_user.id==auth.user_id).select(db.auth_user.wallet)
+    balance=int(row[0]['wallet'])
+
+    if form.process(onvalidation=placeOrderValidation,message_onfailure="Please fill all values correctly!").accepted:
+        dmid = db(db.delivery_type.name==form.vars.delivery_mode).select(db.delivery_type.id)
+        pmid = db(db.payment_type.name==form.vars.payment_mode).select(db.payment_type.id)
+        dmsid = db(db.delivery_status_type.name=='Shipped').select(db.delivery_status_type.id)
+        date = datetime.date.today()
+        new_order_id=db.orders.insert(user_id=auth.user_id,
+                         total_price=int(session.totalPrice),
+                         delivery_mode=dmid[0],
+                         payment_mode=pmid[0],
+                         delivery_status=dmsid[0],
+                         order_date=date,
+                         first_name=form.vars.first_name,
+                         last_name=form.vars.last_name,
+                         email_address=form.vars.email_address,
+                         shipping_address=form.vars.shipping_address,
+                         shipping_city=form.vars.shipping_city,
+                         zip=form.vars.zip_code,
+                         contact=form.vars.contact,
+                         )
+        for i in session.cart:
+            db.ordered_items.insert(order_id=new_order_id,product_id=int(i))
+
+        #Updating user's wallet
+        wallet_balance=balance-int(session.totalPrice)
+        db(db.auth_user.id==auth.user_id).update(wallet=wallet_balance)
+
+        #Making cart empty
+        session.cart={}
+        session.totalPrice=0
+        
+        #Send Mail to user
+        
+        redirect(URL('default','yourorders'))
+    return dict(form=form)
+
+@auth.requires_login()
+def yourorders():
+    order_list=db(db.orders.user_id==auth.user_id).select(db.orders.id,
+                                                         db.orders.order_date,
+                                                         db.orders.delivery_mode,
+                                                         db.orders.payment_mode,
+                                                         db.orders.delivery_status,
+                                                         db.orders.total_price,
+                                                         orderby=~db.orders.order_date).as_list()
+
+    product_list={}
+    for i in range(len(order_list)):
+        cur_order_id = order_list[i]['id']
+        tempList1=db(db.ordered_items.order_id==cur_order_id).select(db.ordered_items.product_id).as_list()
+        tempList2=[]
+        for j in range(len(tempList1)):
+            cur_prod_id=tempList1[j]['product_id']
+            tempRow=db(db.product.id==cur_prod_id).select(db.product.p_name).as_list()
+            tempList2.append(tempRow[0]['p_name'])
+        product_list[cur_order_id]=tempList2
+
+    delivery_mode_list=db(db.delivery_type.id>0).select(db.delivery_type.id,db.delivery_type.name).as_list()
+    payment_mode_list=db(db.payment_type.id>0).select(db.payment_type.id,db.payment_type.name).as_list()
+    delivery_status_list=db(db.delivery_status_type.id>0).select(db.delivery_status_type.id,db.delivery_status_type.name).as_list()
+
+    return locals()

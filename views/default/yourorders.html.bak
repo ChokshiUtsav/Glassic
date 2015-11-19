@@ -1,0 +1,65 @@
+{{extend 'layout.html'}}
+{{totalPrice=0}}
+<div class="row">
+  <h4>
+    <span class="glyphicon glyphicon glyphicon-tasks" aria-hidden="true"></span>
+     Your Past Orders
+  </h4>
+</div>
+<hr/>
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Items</th>
+        <th>Delivery Mode</th>
+        <th>Payment Mode</th>
+        <th>Delivery Status</th>
+        <th>Total Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{for i in order_list:}}
+      <tr>
+        <td>{{=i['order_date']}}</td>
+        <td>
+            <ul>
+              {{order_id=i['id']}}
+              {{list1=product_list[order_id]}}
+              {{for j in list1:}}
+                <li>{{=j}}</li>
+              {{pass}}
+            </ul>
+        </td>
+        <td>
+            {{temp=i['delivery_mode']}}
+            {{for j in delivery_mode_list:}}
+            {{if j['id']==temp:}}
+            {{del_mode=j['name']}}
+            {{pass}}
+            {{pass}}
+            {{=del_mode}}
+        </td>
+        <td>
+            {{temp=i['payment_mode']}}
+            {{for j in payment_mode_list:}}
+            {{if j['id']==temp:}}
+            {{pay_mode=j['name']}}
+            {{pass}}
+            {{pass}}
+            {{=pay_mode}}
+        </td>
+        <td>
+            {{temp=i['delivery_status']}}
+            {{for j in delivery_status_list:}}
+            {{if j['id']==temp:}}
+            {{del_status=j['name']}}
+            {{pass}}
+            {{pass}}
+            {{=del_status}}
+        </td>
+        <td> {{=i['total_price']}} </td>
+      </tr>
+      {{pass}}
+    </tbody>
+</table>

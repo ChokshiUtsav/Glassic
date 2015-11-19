@@ -1,4 +1,4 @@
-timestamp: 2015-11-13T20:08:41.925470
+timestamp: 2015-11-19T18:48:16.762819
 CREATE TABLE auth_user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name CHAR(128),
@@ -12,26 +12,27 @@ CREATE TABLE auth_user(
     date_of_birth DATE,
     address CHAR(512),
     city CHAR(512),
-    zip CHAR(512),
-    phone CHAR(512),
-    picture CHAR(512)
+    zip INTEGER,
+    phone INTEGER,
+    picture CHAR(512),
+    wallet INTEGER
 );
 success!
-timestamp: 2015-11-13T20:08:42.079578
+timestamp: 2015-11-19T18:48:16.884617
 CREATE TABLE auth_group(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     role CHAR(512),
     description TEXT
 );
 success!
-timestamp: 2015-11-13T20:08:42.179711
+timestamp: 2015-11-19T18:48:17.018974
 CREATE TABLE auth_membership(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2015-11-13T20:08:42.293844
+timestamp: 2015-11-19T18:48:17.156069
 CREATE TABLE auth_permission(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -40,7 +41,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2015-11-13T20:08:42.428488
+timestamp: 2015-11-19T18:48:17.266363
 CREATE TABLE auth_event(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     time_stamp TIMESTAMP,
@@ -50,7 +51,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2015-11-13T20:08:42.575258
+timestamp: 2015-11-19T18:48:17.367602
 CREATE TABLE auth_cas(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
@@ -60,37 +61,37 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2015-11-13T20:08:42.724308
+timestamp: 2015-11-19T18:48:17.482843
 CREATE TABLE category_type(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name CHAR(512) NOT NULL UNIQUE
 );
 success!
-timestamp: 2015-11-13T20:08:42.876239
+timestamp: 2015-11-19T18:48:17.624070
 CREATE TABLE style_type(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name CHAR(512) NOT NULL UNIQUE
 );
 success!
-timestamp: 2015-11-13T20:08:43.011174
+timestamp: 2015-11-19T18:48:17.758662
 CREATE TABLE shape_type(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name CHAR(512) NOT NULL UNIQUE
 );
 success!
-timestamp: 2015-11-13T20:08:43.157021
+timestamp: 2015-11-19T18:48:17.894881
 CREATE TABLE size_type(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name CHAR(512) NOT NULL UNIQUE
 );
 success!
-timestamp: 2015-11-13T20:08:43.291182
+timestamp: 2015-11-19T18:48:18.029373
 CREATE TABLE price_group_type(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name CHAR(512) NOT NULL UNIQUE
 );
 success!
-timestamp: 2015-11-13T20:08:43.442044
+timestamp: 2015-11-19T18:48:18.168565
 CREATE TABLE product(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     p_name CHAR(512) NOT NULL UNIQUE,
@@ -107,5 +108,72 @@ CREATE TABLE product(
     created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
     modified_on TIMESTAMP,
     modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2015-11-19T18:48:18.365687
+CREATE TABLE delivery_type(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) NOT NULL UNIQUE
+);
+success!
+timestamp: 2015-11-19T18:48:18.499682
+CREATE TABLE payment_type(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) NOT NULL UNIQUE
+);
+success!
+timestamp: 2015-11-19T18:48:18.645733
+CREATE TABLE delivery_status_type(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) NOT NULL UNIQUE
+);
+success!
+DROP TABLE auth_user;
+success!
+DROP TABLE auth_group;
+DROP TABLE auth_group;
+timestamp: 2015-11-19T18:53:16.551776
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    username CHAR(128),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512),
+    date_of_birth DATE,
+    address CHAR(512),
+    city CHAR(512),
+    zip INTEGER,
+    phone INTEGER,
+    picture CHAR(512),
+    wallet INTEGER
+);
+success!
+timestamp: 2015-11-19T18:59:46.105102
+CREATE TABLE orders(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    total_price INTEGER,
+    delivery_mode INTEGER REFERENCES delivery_type (id) ON DELETE CASCADE  ,
+    payment_mode INTEGER REFERENCES payment_type (id) ON DELETE CASCADE  ,
+    delivery_status INTEGER REFERENCES delivery_status_type (id) ON DELETE CASCADE  ,
+    order_date DATE,
+    first_name CHAR(512),
+    last_name CHAR(512),
+    email_address CHAR(512),
+    shipping_address CHAR(512),
+    shipping_city CHAR(512),
+    zip INTEGER,
+    contact CHAR(10)
+);
+success!
+timestamp: 2015-11-19T19:00:10.849289
+CREATE TABLE ordered_items(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER REFERENCES orders (id) ON DELETE CASCADE  ,
+    product_id INTEGER REFERENCES product (id) ON DELETE CASCADE  
 );
 success!

@@ -39,7 +39,7 @@ else:
         response.menu = [
         (T('Browse | Shop'), False, URL('default', 'browseandshop'), []),
         (T('Your Cart'), False, URL('default', 'yourcart'), []),
-        (T('Your Orders'), False, URL('default', 'index'), []),
+        (T('Your Orders'), False, URL('default', 'yourorders'), []),
         (T('Try'), False, URL('default', 'index'), []),
         (T('WishList'), False, URL('default', 'index'), []),
         ]
