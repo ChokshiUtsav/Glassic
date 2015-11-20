@@ -65,7 +65,59 @@ def browseandshop():
     shape_list=db(db.shape_type.id>0).select().as_list()
     size_list=db(db.size_type.id>0).select().as_list()
     price_group_list=db(db.price_group_type.id>0).select().as_list()
-    product_list=db(db.product.id>0).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price).as_list()
+    if request.args(0):
+        filterCriteria=str(request.args(0))
+        field=filterCriteria.split("=")[0]
+        value=filterCriteria.split("=")[1]
+        p_field="p_"+field.split("_")[0]
+        product_list=[]
+        if field=='category_type':
+            valId1 = db(db.category_type.name==value).select(db.category_type.id).as_list()
+            if len(valId1)!=0:
+                valId=int(valId1[0]['id'])
+                product_list=db(db.product.p_category==valId).select(db.product.id,
+                                                          db.product.p_name,
+                                                          db.product.p_image,
+                                                          db.product.p_price).as_list()
+        elif field=='style_type':
+            valId1 = db(db.style_type.name==value).select(db.style_type.id).as_list()
+            if len(valId1)!=0:
+                valId=int(valId1[0]['id'])
+                product_list=db(db.product.p_style==valId).select(db.product.id,
+                                                          db.product.p_name,
+                                                          db.product.p_image,
+                                                          db.product.p_price).as_list()
+        elif field=='shape_type':
+            valId1 = db(db.shape_type.name==value).select(db.shape_type.id).as_list()
+            if len(valId1)!=0:
+                valId=int(valId1[0]['id'])
+                product_list=db(db.product.p_shape==valId).select(db.product.id,
+                                                          db.product.p_name,
+                                                          db.product.p_image,
+                                                          db.product.p_price).as_list()
+        elif field=='size_type':
+            valId1 = db(db.size_type.name==value).select(db.size_type.id).as_list()
+            if len(valId1)!=0:
+                valId=int(valId1[0]['id'])
+                product_list=db(db.product.p_size==valId).select(db.product.id,
+                                                          db.product.p_name,
+                                                          db.product.p_image,
+                                                          db.product.p_price).as_list()
+        elif field=='price_group_type':
+            valId1 = db(db.price_group_type.name==value).select(db.price_group_type.id).as_list()
+            if len(valId1)!=0:
+                valId=int(valId1[0]['id'])
+                product_list=db(db.product.p_price_group==valId).select(db.product.id,
+                                                          db.product.p_name,
+                                                          db.product.p_image,
+                                                          db.product.p_price).as_list()
+
+        #response.flash=field+value+p_field+str(valId)
+    else:
+        product_list=db(db.product.id>0).select(db.product.id,
+                                                db.product.p_name,
+                                                db.product.p_image,
+                                                db.product.p_price).as_list()
     return locals()
 
 @auth.requires_login()
@@ -83,6 +135,9 @@ def maintain_cart():
 @auth.requires_login()
 #To see and process the cart
 def yourcart():
+    if request.args(0):
+        key=str(request.args(0))
+        del session.cart[key]
     if not session.cart:
         session.flash = 'Add something to cart'
         redirect(URL('default', 'browseandshop'))

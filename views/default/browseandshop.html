@@ -9,7 +9,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {{for i in category_list:}}
-                <li><a href="#">{{=i['name']}}</a></li>
+                {{str11='browseandshop/'+"category_type="+str(i['name'])}}
+                <li><a href="{{=URL('default',str11)}}">{{=i['name']}}</a></li>
                 <!--<li style="margin-left:20px"></li>-->
                 {{pass}}
             </ul>
@@ -20,9 +21,9 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {{for i in style_list:}}
-                <li><a href="#">{{=i['name']}}</a></li>
-                <!--<li style="margin-left:20px"></li>-->
-                {{pass}}
+                {{str11='browseandshop/'+"style_type="+str(i['name'])}}
+                <li><a href="{{=URL('default',str11)}}">{{=i['name']}}</a></li>
+               {{pass}}
             </ul>
           </li>
           <li role="presentation" class="dropdown">
@@ -31,8 +32,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {{for i in shape_list:}}
-                <li><a href="#">{{=i['name']}}</a></li>
-                <!--<li style="margin-left:20px"></li>-->
+                {{str11='browseandshop/'+"shape_type="+str(i['name'])}}
+                <li><a href="{{=URL('default',str11)}}">{{=i['name']}}</a></li>
                 {{pass}}
             </ul>
           </li>
@@ -42,8 +43,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {{for i in size_list:}}
-                <li><a href="#">{{=i['name']}}</a></li>
-                <!--<li style="margin-left:20px"></li>-->
+                {{str11='browseandshop/'+"size_type="+str(i['name'])}}
+                <li><a href="{{=URL('default',str11)}}">{{=i['name']}}</a></li>
                 {{pass}}
             </ul>
           </li>
@@ -53,15 +54,15 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {{for i in price_group_list:}}
-                <li><a href="#">{{=i['name']}}</a></li>
-                <!--<li style="margin-left:20px"></li>-->
+                {{str11='browseandshop/'+"shape_type="+str(i['name'])}}
+                <li><a href="{{=URL('default',str11)}}">{{=i['name']}}</a></li>
                 {{pass}}
             </ul>
           </li>
-         <button type="button" class="btn btn-primary" aria-label="Left Align" style="margin-left:20px">
+         <!--<button type="button" class="btn btn-primary" aria-label="Left Align" style="margin-left:20px">
              <span class="glyphicon glyphicon glyphicon-filter" aria-hidden="true"></span>
              Filter
-        </button>
+        </button>-->
   </div>
   <hr/>
   <div class="row">
@@ -78,8 +79,10 @@
                 <label>
                   {{cartItemIDStr="cartItem_"+str(i['id'])}}
                   {{str1="maintain_cart/"+str(i['id'])}}
-                  <input type="checkbox" id="{{=cartItemIDStr}}" onclick="ajax('{{=URL('default',str1)}}', [], '');"/> Add to Cart
-                </label>
+                  {{status=True}}
+                  <input type="checkbox" id="{{=cartItemIDStr}}" onclick="ajax('{{=URL('default',str1)}}', [], '');"
+                         {{if str(i['id']) in session.cart:}}checked{{pass}} /> Add to Cart
+                   </label>
               </div>
          </div>
          <div class="col-md-6">
@@ -97,10 +100,4 @@
   {{pass}}
 </div>
 </div>
-<script>
-//function handleCartCheck(cart1) {
-//   var value = cart1.id;
-//     alert(msg)
-//}
-</script>
 {{end}}

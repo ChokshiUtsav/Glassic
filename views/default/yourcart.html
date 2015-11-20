@@ -25,6 +25,7 @@
         <th>Item</th>
         <th>QTY</th>
         <th>SubTotal</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -34,15 +35,21 @@
         <td>{{=count}}</td>
         <td>
             <div class="thumbnail" style="width:200px">
-               <img width="175px" src="{{=URL('download', args=i['p_image'])}}" />
+               <img width="100px" src="{{=URL('download', args=i['p_image'])}}" />
                <div class="caption">
-                       <h4>{{=i['p_name']}}</h4>
-                       <h5>Price : {{=i['p_price']}} </h5>
+                       <h5>{{=i['p_name']}}</h5>
+                       <h6>Price : {{=i['p_price']}} </h6>
                </div>
             </div>
         </td>
         <td>1</td>
         <td><h5>Price : {{=i['p_price']}} </h5></td>
+        <td>
+            {{str11="yourcart/"+str(i['id'])}}
+            <a class="btn btn-default-small" href="{{=URL('default',str11)}}" role="button">
+            <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </a>
+        </td>
       </tr>
       {{count=count+1}}
       {{totalPrice=totalPrice+i['p_price']}}
