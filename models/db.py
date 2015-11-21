@@ -58,42 +58,44 @@ service = Service()
 plugins = PluginManager()
 
 auth.settings.extra_fields['auth_user']= [
-  Field('date_of_birth',type='date'),
+  Field('date_of_birth',type='date',required=True),
   Field('address'),
-  Field('city'),
-  Field('zip'),
-  Field('phone'),
-  Field('picture', 'upload'),]
+  Field('city','string'),
+  Field('zip','integer',length=6),
+  Field('phone','string',length=10),
+  Field('picture', 'upload'),
+  Field('wallet','integer')]
 
 auth.settings.password_min_length = 6
 auth.settings.actions_disabled = ['retrieve_username']
-
-#To activate email based verification
-#auth.settings.registration_requires_verification = True
-
-#To allow user to automatically login after regirsteration
-auth.settings.login_after_registration = True
-
-#Not to create user group for every user
-auth.settings.create_user_groups = False
 
 ## create all tables needed by auth if not custom tables
 auth.define_tables(username=True, signature=False)
 
 ## configure email
 mail = auth.settings.mailer
-
 mail.settings.server =  'smtp.gmail.com:587'
 mail.settings.sender = 'singhal.abhi0009@gmail.com'
 mail.settings.login = 'singhal.abhi0009@gmail.com:ygfqmgwydvtbcpba'
 
 
 ## configure auth policy
+#To activate email based verification
 auth.settings.registration_requires_verification = True
-auth.settings.registration_requires_approval = False
-auth.settings.reset_password_requires_verification = True
-auth.messages.verify_email = 'Click on the link http://' +     request.env.http_host +     URL(r=request,c='default',f='user',args=['verify_email']) +     '/%(key)s to verify your email'
-auth.messages.reset_password = 'Click on the link http://' +     request.env.http_host +     URL(r=request,c='default',f='user',args=['reset_password']) +     '/%(key)s to reset your password'
+#To allow user to automatically login after regirsteration
+auth.settings.login_after_registration = True
+#Not to create user group for every user
+auth.settings.create_user_groups = False
+
+auth.messages.verify_email = 'You are now registered customer of Glassy.Please click on the link http://' + request.env.http_host + URL(r=request,c='default',f='user',args=['verify_email']) + '/%(key)s to verify your email'
+auth.messages.reset_password = 'You have been authenticated.Please click on the link http://' + request.env.http_host + URL(r=request,c='default',f='user',args=['reset_password']) + '/%(key)s to reset your password'
+
+if auth.has_membership(role='admin'):
+    auth.settings.login_next = URL('admin','manage_users')
+    auth.settings.register_next = URL('admin','manage_users')
+else:
+    auth.settings.login_next = URL('default','browseandshop')
+    auth.settings.register_next = URL('default','browseandshop')
 
 #########################################################################
 ## Define your tables below (or better in another model file) for example
