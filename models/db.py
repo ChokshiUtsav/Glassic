@@ -62,7 +62,7 @@ auth.settings.extra_fields['auth_user']= [
   Field('address'),
   Field('city','string'),
   Field('zip','integer',length=6),
-  Field('phone','integer',length=10),
+  Field('phone','string',length=10),
   Field('picture', 'upload'),
   Field('wallet','integer')]
 

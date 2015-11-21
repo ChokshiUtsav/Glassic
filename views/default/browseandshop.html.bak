@@ -54,7 +54,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 {{for i in price_group_list:}}
-                {{str11='browseandshop/'+"shape_type="+str(i['name'])}}
+                {{str11='browseandshop/'+"price_group_type="+str(i['name'])}}
                 <li><a href="{{=URL('default',str11)}}">{{=i['name']}}</a></li>
                 {{pass}}
             </ul>
@@ -67,19 +67,18 @@
   <hr/>
   <div class="row">
    {{for i in product_list:}}
-   <div class="col-md-4">
+   <div class="col-md-3">
      <div class="thumbnail">
-       <img width="175px" src="{{=URL('download', args=i['p_image'])}}" />
+       <img width="150px" src="{{=URL('download', args=i['p_image'])}}" />
        <div class="caption">
-        <h3>{{=i['p_name']}}</h3>
-        <h4>Price : {{=i['p_price']}} </h4>
+        <h4>{{=i['p_name']}}</h4>
+        <h5>Price : {{=i['p_price']}} </h5>
         <div class="row">
           <div class="col-md-6">
               <div class="checkbox">
                 <label>
                   {{cartItemIDStr="cartItem_"+str(i['id'])}}
                   {{str1="maintain_cart/"+str(i['id'])}}
-                  {{status=True}}
                   <input type="checkbox" id="{{=cartItemIDStr}}" onclick="ajax('{{=URL('default',str1)}}', [], '');"
                          {{if str(i['id']) in session.cart:}}checked{{pass}} /> Add to Cart
                    </label>
@@ -89,7 +88,9 @@
               <div class="checkbox">
                 <label>
                   {{wlItemIDStr="cartItem_"+str(i['id'])}}
-                  <input type="checkbox" id="{{=wlItemIDStr}}"> Add to WishList
+                  {{str1="maintain_wishlist/"+str(i['id'])}}
+                  <input type="checkbox" id="{{=wlItemIDStr}}" onclick="ajax('{{=URL('default',str1)}}', [], '');"
+                          {{if str(i['id']) in wishlist.cart:}}checked{{pass}}/> Add to WishList
                 </label>
               </div>
           </div>

@@ -33,6 +33,8 @@ if auth.has_membership(role='admin'):
     response.menu = [
     (T('Manage Products'), False, URL('admin', 'manage_products'), []),
     (T('Manage Users'), False, URL('admin', 'manage_users'), []),
+    (T('Manage Orders'), False, URL('admin', 'manage_orders'), []),
+    (T('Manage Ordered Items'), False, URL('admin', 'manage_ordered_items'), []),
     ]
 else:
     #if auth.user:
@@ -41,7 +43,7 @@ else:
         (T('Your Cart'), False, URL('default', 'yourcart'), []),
         (T('Your Orders'), False, URL('default', 'yourorders'), []),
         (T('Try'), False, URL('default', 'index'), []),
-        (T('WishList'), False, URL('default', 'index'), []),
+        (T('WishList'), False, URL('default', 'wishlist'), []),
         ]
     #else:
         (T('Home'), False, URL('default', 'index'), [])

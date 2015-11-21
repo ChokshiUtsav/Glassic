@@ -177,3 +177,11 @@ CREATE TABLE ordered_items(
     product_id INTEGER REFERENCES product (id) ON DELETE CASCADE  
 );
 success!
+timestamp: 2015-11-21T13:45:41.298039
+CREATE TABLE wishlist(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    product_id INTEGER REFERENCES product (id) ON DELETE CASCADE  
+);
+success!
+success!

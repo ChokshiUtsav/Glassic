@@ -1,0 +1,36 @@
+{{extend 'layout.html'}}
+<h4>
+<span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span>
+Your Wish List
+</h4>
+<hr/>
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Item</th>
+        <th>QTY</th>
+        <th>SubTotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{count=0}}
+      {{for i in product_list:}}
+      <tr>
+        <td>{{=count}}</td>
+        <td>
+            <div class="thumbnail" style="width:200px">
+               <img width="150px" src="{{=URL('download', args=i['p_image'])}}" />
+               <div class="caption">
+                       <h5>{{=i['p_name']}}</h5>
+                       <h6>Price : {{=i['p_price']}} </h6>
+               </div>
+            </div>
+        </td>
+        <td>1</td>
+        <td><h5>Price : {{=i['p_price']}} </h5></td>
+      </tr>
+      {{count=count+1}}
+      {{pass}}
+    </tbody>
+</table>

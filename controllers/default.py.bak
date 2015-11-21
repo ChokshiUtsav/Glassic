@@ -138,7 +138,6 @@ def yourcart():
     if request.args(0):
         key=str(request.args(0))
         del session.cart[key]
-
     if not session.cart:
         session.flash = 'Add something to cart'
         redirect(URL('default', 'browseandshop'))
@@ -149,6 +148,7 @@ def yourcart():
                 product_list.append(row)
     return locals()
 
+@auth.requires_login()
 def placeOrderValidation(form):
 
     pmode = str(form.vars.payment_mode)
@@ -218,14 +218,38 @@ def placeorder():
             db.ordered_items.insert(order_id=new_order_id,product_id=int(i))
 
         #Updating user's wallet
-        wallet_balance=balance-int(session.totalPrice)
-        db(db.auth_user.id==auth.user_id).update(wallet=wallet_balance)
+        if str(form.vars.payment_mode)=='Pay Using Wallet':
+            wallet_balance=balance-int(session.totalPrice)
+            db(db.auth_user.id==auth.user_id).update(wallet=wallet_balance)
+
+        #Send Mail to user
+        msg_list={}
+        msg_list['first_name']=form.vars.first_name
+        msg_list['last_name']=form.vars.last_name
+        msg_list['email_address']=form.vars.email_address
+        msg_list['shipping_address']=form.vars.shipping_address
+        msg_list['shipping_city']=form.vars.shipping_city
+        msg_list['zip_code']=form.vars.zip_code
+        msg_list['id']=new_order_id
+        msg_list['order_date']=datetime.date.today()
+        product_list=[]
+        for i in session.cart:
+            for row in db(db.product.id==int(i)).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price):
+                product_list.append(row)
+        msg_list['ordered_products']=product_list
+        msg_list['delivery_mode']=form.vars.delivery_mode
+        msg_list['payment_mode']=form.vars.payment_mode
+        msg_list['delivery_status']='Will be shipped'
+
+        context=dict(msg_list=msg_list)
+        message=response.render('default/mail.html',context)
+        mail.send(to=[str(form.vars.email_address)],
+                  subject='You have successfully placed an order on Glassy',
+                  message=message)
 
         #Making cart empty
         session.cart={}
         session.totalPrice=0
-
-        #Send Mail to user
 
         redirect(URL('default','yourorders'))
     return dict(form=form)
@@ -254,5 +278,47 @@ def yourorders():
     delivery_mode_list=db(db.delivery_type.id>0).select(db.delivery_type.id,db.delivery_type.name).as_list()
     payment_mode_list=db(db.payment_type.id>0).select(db.payment_type.id,db.payment_type.name).as_list()
     delivery_status_list=db(db.delivery_status_type.id>0).select(db.delivery_status_type.id,db.delivery_status_type.name).as_list()
+
+    return locals()
+
+@auth.requires_login()
+def maintain_wishlist():
+    key=str(request.args(0))
+    if not session.wishlist:
+        session.wishlist={}
+        response.flash="Found Empty Wishlist"
+    if key in session.wishlist:
+        del session.wishlist[key]
+    else:
+        session.wishlist[key]=1
+        response.flash=session.wishlist
+
+@auth.requires_login()
+def wishlist():
+    '''
+    if not session.wishlist:
+        session.flash = 'Add something to wishlist'
+        redirect(URL('default', 'browseandshop'))
+    else:
+    '''
+    user=db(db.wishlist.user_id == auth.user_id).select(db.wishlist.product_id).as_list()
+    product_list=[]
+
+    for pid in user:
+        for row in db(db.product.id==pid['product_id']).select(db.product.id,
+                                                               db.product.p_name,
+                                                               db.product.p_image,
+                                                               db.product.p_price):
+            product_list.append(row)
+
+    k=[]
+    for i in user:
+        k.append(i['product_id'])
+
+    for i in session.wishlist:
+        if int(i) not in k :
+            db.wishlist.insert(user_id=auth.user_id,product_id=i)
+            for row in db(db.product.id==i).select(db.product.id,db.product.p_name,db.product.p_image,db.product.p_price):
+                    product_list.append(row)
 
     return locals()

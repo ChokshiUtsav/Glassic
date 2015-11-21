@@ -1,0 +1,3 @@
+{{extend 'layout.html'}}
+<h1>This is the admin/manage_ordered_items.html template</h1>
+{{=BEAUTIFY(response._vars)}}

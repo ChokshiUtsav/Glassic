@@ -70,5 +70,14 @@ db.define_table('orders',
    Field('contact','string',length=10),
    migrate=True
    )
+#Following table is required to make wishslist
+db.define_table('wishlist',
+    Field('user_id',db.auth_user),
+    Field('product_id',db.product),
+    format='%(user_id)s %(product_id)s',
+    migrate=True
+    )
+
 #Maintaing a cart to save selected items across pages
 session.cart = session.cart or {}
+session.wishlist=session.wishlist or {}
