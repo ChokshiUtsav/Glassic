@@ -1,1 +1,113 @@
-Glassic : An online Glass Shop
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Glassic by Utsav Chokshi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Glassic</h1>
+      <h2 class="project-tagline">An online glass selling application</h2>
+      <a href="https://github.com/ChokshiUtsav/Glassic" class="btn">View on GitHub</a>
+      <a href="https://github.com/ChokshiUtsav/Glassic/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ChokshiUtsav/Glassic/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="hindi-text-processing-framework" class="anchor" href="#hindi-text-processing-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hindi Text Processing Framework</h1>
+
+<p>The aim of this project is to handle the following tasks for the <strong>HINDI</strong> language :</p>
+
+<ul>
+<li><strong>Stop Word Detection</strong></li>
+<li><strong>Tokenisation</strong></li>
+<li><strong>Sentence Breaking</strong></li>
+<li><strong>Identifying Variations</strong></li>
+<li><strong>POS Tagging</strong></li>
+<li><strong>Concept / Keywords Identification</strong></li>
+<li><strong>Entity Recognition</strong></li>
+<li><strong>Categorisation</strong></li>
+</ul>
+
+<h2>
+<a id="a-bit-of-on-introduction" class="anchor" href="#a-bit-of-on-introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A Bit of on Introduction</h2>
+
+<p>This task was assigned to Team 7 (which is us) as a part of Major Project for the Information Retrieval and Extraction Course. This project was divided into three phases. In the first phase we were required to come up with a scope document and deliverables for the second and the third phase respectively. In the second and third phase, we had to actually code and then implement what we had proposed.</p>
+
+<h2>
+<a id="tags" class="anchor" href="#tags" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tags</h2>
+
+<p><strong>#IIITH</strong> <strong>#IIIT-H</strong> <strong>#Major_Project</strong> <strong>#IRE</strong> <strong>#Information_Retrieval_and_Extraction</strong> <strong>#Hindi</strong> <strong>#StopWordDetection</strong> <strong>#POS</strong> <strong>#POS_Tagger</strong> <strong>#Tokeniser</strong> <strong>#Tokenisation</strong> <strong>#Sentence_Identifier</strong> <strong>#SentenceBreaking</strong> <strong>#IdentifyingVariations</strong> <strong>#Identify_Variations</strong> <strong>#Concept_Identification</strong> <strong>#Keywords_Identification</strong> <strong>#Entity_Recognition</strong> <strong>#NER</strong> <strong>#Categorisation</strong> <strong>#News_Categories</strong> <strong>#Information Retrieval and Extraction Course</strong> <strong>#COOL</strong></p>
+
+<hr>
+
+<pre><code>def get_ready():
+    print "IT BEGINS!!"
+get_ready()
+</code></pre>
+
+<hr>
+
+<h2>
+<a id="explanation-of-the-individual-tasks" class="anchor" href="#explanation-of-the-individual-tasks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Explanation of the Individual Tasks</h2>
+
+<p>Below is an explanation of each individual tasks that we have tried to achieve with this project.</p>
+
+<h3>
+<a id="tokenisation" class="anchor" href="#tokenisation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tokenisation</h3>
+
+<p>Tokenisation is the process of breaking the stream of text into words, phrases or any other important unit for that matter. Those who have had a chance to look at the working of compilers would know this better.<br>
+Given, that we have a lot of sentences in Hindi, we would want the entire text to be segregated into tokens i.e words. Along with this we would also want that other tokens like dates, designations, abbreviations do retain their original form and don't get messed up.   </p>
+
+<h3>
+<a id="sentence-breaker" class="anchor" href="#sentence-breaker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sentence Breaker</h3>
+
+<p>In Hindi we denote the end of a sentence by what is called a 'purna viraam' which is denoted by '।'. Our goal here was to identify that and taking care of all the scenarios, break the entire text into sentences. A given text is hence broken down into sentences and a corresponding id is provided to each one.</p>
+
+<h3>
+<a id="stop-word-detection" class="anchor" href="#stop-word-detection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stop Word Detection</h3>
+
+<p>These are the most common words that can be found in a particular sentence. Generally, these are the words that are very helpful in bringing grammaticality to a particular sentence. Here, two methods have been implemented to find out the different stop word. One of the methods, simply takes a number n, and using that finds a list of top n occurring words across a corpus. The other method relies on <strong>tf-idf</strong> scheme, and requires a corpus which comprises of different documents.</p>
+
+<h3>
+<a id="part-of-speech-tagging" class="anchor" href="#part-of-speech-tagging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Part of Speech Tagging</h3>
+
+<p>The task here was to tag a particular using a predefined set of POS tags. It is a method by which the word categories are disambiguated. For this purpose, two models are implemented. One of them follows the <strong>HMM</strong> (Hidden Markov Model). The other one is a <strong>CRF</strong> based model.</p>
+
+<h3>
+<a id="concept--keyword-identification" class="anchor" href="#concept--keyword-identification" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Concept / Keyword Identification</h3>
+
+<p>The task here was to identify the different <strong>NP's</strong> (Noun Phrases). This has been done again by using <strong>HMM</strong>.</p>
+
+<h3>
+<a id="entity-recognition" class="anchor" href="#entity-recognition" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Entity Recognition</h3>
+
+<p>The task here was to identify the different named entities. For this purpose, <strong>CRF</strong> (Conditional Random Fields) were used. A toolkit named CRF++ was utilised for this purpose.</p>
+
+<h3>
+<a id="categorisation" class="anchor" href="#categorisation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Categorisation</h3>
+
+<p>Every News article belongs to a set of different categories. Such categories might be politics, entertainment, sports etc. To identify an article's category, a model based on <strong>KNN</strong> (K nearest neighbour) was implemented. The articles were converted into their corresponding vectors using tf-idf method.</p>
+
+<h3>
+<a id="identifying-variations" class="anchor" href="#identifying-variations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Identifying Variations</h3>
+
+<p>The task here was the identify the variations within the language. Often, it happens, that within the same language, because of some kind of divergence, the spellings of the same words change. Such identification is very important a variety of tasks. In case of Machine Translation, or for that matter in case of any sequence labelling task like NER, we would want to identify these variations in order to improve the accuracy. Hence, for this purpose, a set of rules have been designed which help identify these variations.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/vaibhav4595/hin_framework">Hindi Framework</a> is maintained by <a href="https://github.com/vaibhav4595">vaibhav4595</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
